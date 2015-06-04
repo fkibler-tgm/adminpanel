@@ -32,142 +32,113 @@
     <![endif]-->
 	<!--<script type="text/javascript" src="{{ URL::asset('http://www.flotchart.org/flot/jquery.flot.js')}}"></script>-->
     <!-- Bootstrap Core JavaScript -->
-	<link href="js/flot/examples/examples.css" rel="stylesheet" type="text/css">
-	<script language="javascript" type="text/javascript" type="text/javascript" src="{{ URL::asset('js/flot/jquery.js')}}"></script>
-	<script language="javascript" type="text/javascript" src="{{ URL::asset('js/flot/jquery.flot.js') }}"></script>
+	<script src="{{ URL::asset('js/jquery.js')}}"></script>
 	<script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
 	<script type="text/javascript">
-		$(function() {
+				$.getScript('http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',function(){
+					$.getScript('http://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.0/morris.min.js',function(){
+						  function renderLiveTempGraph() {  
+							  // Get ready to store our graph instance in a variable
+							  var mainGraph;
 
-		// We use an inline data source in the example, usually data would
-		// be fetched from a server
+							  // Call our API
+							  $.getJSON('/devices/1/recent-temps',
+								function(results) {
 
-		var data = [],
-			totalPoints = 300;
+								  // Initialise a Morris line graph and store it in mainGraph
+								  mainGraph = Morris.Area({
+									element: 'RAM',
+									// Tell Morris where the data is
+									data: results.graphData,
+									// Tell Morris which property of the data
+									// is to be mapped to which axis
+									xkey: 'timestamp',
+									ykeys: ['temp'],
 
-		function getRandomData() {
+									postUnits: ' °c',
+									lineColors: ['#199cef'],
+									goals: [6.0],
+									goalLineColors: ['#FF0000'],
+									labels: ['Temperature'],
+									lineWidth: 3,
+									pointSize: 2,
+									resize: true
+									});
 
-			if (data.length > 0)
-				data = data.slice(1);
-
-			// Do a random walk
-
-			while (data.length < totalPoints) {
-
-				var prev = data.length > 0 ? data[data.length - 1] : 50,
-					y = prev + Math.random() * 10 - 5;
-
-				if (y < 0) {
-					y = 0;
-				} else if (y > 100) {
-					y = 100;
-				}
-
-				data.push(y);
-			}
-
-			// Zip the generated y values with the x values
-
-			var res = [];
-			for (var i = 0; i < data.length; ++i) {
-				res.push([i, data[i]])
-			}
-
-			return res;
-		}
-
-		// Set up the control widget
-
-		var updateInterval = 30;
-		$("#updateInterval").val(updateInterval).change(function () {
-			var v = $(this).val();
-			if (v && !isNaN(+v)) {
-				updateInterval = +v;
-				if (updateInterval < 1) {
-					updateInterval = 1;
-				} else if (updateInterval > 2000) {
-					updateInterval = 2000;
-				}
-				$(this).val("" + updateInterval);
-			}
-		});
-
-		var plot = $.plot("#ram", [ getRandomData() ], {
-			series: {
-				shadowSize: 0	// Drawing is faster without shadows
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: false
-			}
-		});
-		
-		var plot2 = $.plot("#cpu", [ getRandomData() ], {
-			series: {
-				shadowSize: 0	// Drawing is faster without shadows
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: false
-			}
-		});
-		var plot3 = $.plot("#hdd", [ getRandomData() ], {
-			series: {
-				shadowSize: 0	// Drawing is faster without shadows
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: false
-			}
-		});
-		var plot4 = $.plot("#seiten", [ getRandomData() ], {
-			series: {
-				shadowSize: 0	// Drawing is faster without shadows
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: false
-			}
-		});
-		
-
-		function update() {
-
-			plot.setData([getRandomData()]);
-			plot2.setData([getRandomData()]);
-			plot3.setData([getRandomData()]);
-			plot4.setData([getRandomData()]);
-			
-
-			// Since the axes don't change, we don't need to call plot.setupGrid()
-
-			plot.draw();
-			plot2.draw();
-			plot3.draw();
-			plot4.draw();
-			
-			setTimeout(update, updateInterval);
-		}
-
-		update();
-
-		// Add the Flot version string to the footer
-
-		//$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
-	});
-
+								  // Set up an interval on which the graph data is to be updated
+								  // Note the passing of the mainGraph parameter
+								  setInterval(function() { updateLiveTempGraph(mainGraph); }, 20000);
+								});
+						}
+						function updateLiveTempGraph(mainGraph) {  
+						  // Make our API call again, requesting fresh data
+						  $.getJSON('/devices/1/recent-temps',
+							function(results) {
+							  // Set the already-initialised graph to use this new data
+							  mainGraph.setData(results.graphData);
+							});
+						}
+						 /* Morris.Area({
+								element: 'CPU',
+								data: [
+								  {year: '2010', value: 20, value2: 15},
+								  {year: '2011', value: 10, value2: 12},
+								  {year: '2012', value: 5, value2: 4},
+								  {year: '2013', value: 2, value2: 5},
+								  {year: '2014', value: 20, value2: 26}
+								],
+								xkey: 'year',
+								ykeys: ['value','value2'],
+								labels: ['Value','value2']
+							  });
+							  
+					
+						Morris.Area({
+								element: 'RAM',
+								data: [
+								  {year: '2010', value: 20, value2: 15},
+								  {year: '2011', value: 10, value2: 12},
+								  {year: '2012', value: 5, value2: 4},
+								  {year: '2013', value: 2, value2: 5},
+								  {year: '2014', value: 20, value2: 26}
+								],
+								xkey: 'year',
+								ykeys: ['value','value2'],
+								labels: ['Value','value2']
+							  });
+							  
+							Morris.Area({
+								element: 'HDD',
+								data: [
+								  {year: '2010', value: 20, value2: 15},
+								  {year: '2011', value: 10, value2: 12},
+								  {year: '2012', value: 5, value2: 4},
+								  {year: '2013', value: 2, value2: 5},
+								  {year: '2014', value: 20, value2: 26}
+								],
+								xkey: 'year',
+								ykeys: ['value','value2'],
+								labels: ['Value','value2']
+							  });
+							  
+							  Morris.Area({
+								element: 'Seiten',
+								data: [
+								  {year: '2010', value: 20, value2: 15},
+								  {year: '2011', value: 10, value2: 12},
+								  {year: '2012', value: 5, value2: 4},
+								  {year: '2013', value: 2, value2: 5},
+								  {year: '2014', value: 20, value2: 26}
+								],
+								xkey: 'year',
+								ykeys: ['value','value2'],
+								labels: ['Value','value2']
+							  });
+							  */
+							  
+						  
+});
+});
 	</script>
 </head>
 
@@ -311,7 +282,7 @@
 							<!--
 								I will get them from another person
 							-->
-							<div id="seiten" class="#seiten" style="height: 300px;width:1600px;"></div>
+							<div id="Seiten" style="height: 300px;"></div>
                             </div>
                         </div>
                     </div>
@@ -328,7 +299,7 @@
 								$load = round($loads[0]/($core_nums + 1)*100, 2);
 								echo $load;
 								-->
-							<div id="cpu" class="#cpu" style="height: 300px;width:500px;"></div>
+						<div id="CPU" style="height: 300px;"></div>
                             </div>
                         </div>
                     </div>
@@ -347,7 +318,7 @@
 								} 
 								echo get_memory();  
 							   -->
-								<div id="ram" class="#ram" style="height: 300px;width:500px;"></div>
+								<div id="RAM" style="height: 300px;"></div>
                             </div>
                         </div>
                     </div>
@@ -383,8 +354,7 @@
 									*/
 								?>
 									<!--<div id="chartContainer" style="height: 300px; width: 100%;"></div>-->
-									
-									<div id="hdd" class="#hdd" style="height: 300px;width:500px;"></div>
+									<div id="HDD" style="height: 300px;"></div>
                             </div>
                         </div>
                     </div>

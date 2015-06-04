@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
 /**
- * @author Gradonski Janusz
+ * @author Gradonski Janusz,Florian Kibler,Daniel Novotny
  * @copyright 2015
  * 
  */
@@ -11,80 +11,56 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class AdminPanelController extends Controller {
-
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		//
+	
+	public function __construct() {
+		
 	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
+	
+	public function setRang($rang,$username) {
+		DB::table('user')->where('username',$username)->update(array('rang' => $rang));
 	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
+	
+	public function getRang($username) {
+		$rang=DB::table('user')->where('username',$username)->get(['rang']);
+		return $this->rang;
 	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
+	
+	public function removeUser($username) {
+		DB::table('user')->where('username',$username)->delete();
 	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
+	
+	public function addUser($username,$vorname,$nachname,$email,$password,$rang) {
+		DB::table('user')->insert(array('username' => $username,'vorname' => $vorname,'nachname' => $nachname,'email' => $email, 'password' => $password,'rang' => $rang));
 	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
+	
+	public function getUser($rang) {
+		$user = DB::table('user')->where('rang',$rang)->get();
+		$u_array = array(
+		foreach($this->user as $users) {
+			array($users->id,$users->username,$users->email,$users->rang);
+		}
+		);
+		return $this->u_array;
 	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-	//
+	
+	public function getallUser() {
+		$user = DB::table('user')->get();
+		$u_array = array(
+		foreach($this->user as $users) {
+			array($users->id,$users->username,$users->email,$users->rang);
+		}
+		);
+		return $this->u_array;
 	}
+	
+	public function blockUser($username) {
+		DB::table('user')->where('username',$username)->update(array('rang' => 'blocked'));
+	}
+	
+	public function unblockUser($username) {
+		DB::table('user')->where('username',$username)->update(array('rang' => 'standarduser'));
+	}
+	
 	/**
 	 * Bildet die Startseite der Adminunterseite
 	 *

@@ -19,6 +19,7 @@
     <!-- Custom Fonts -->
     <link href="{{ URL::asset('font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
 	
+	
 	 <!-- jQuery -->
     <script src="{{ URL::asset('js/jquery.js') }}"></script>
 
@@ -201,15 +202,8 @@
                                 </thead>
                                 <tbody>
 								<?php
-									for($i = 1; $i < 15; $i++){
-                                    	echo "<tr>";
-										echo "<td><input type='checkbox'></td>";
-										echo "<td>" . "0000" . $i . "</td>";
-                                        echo "<td>" . "user0" . $i . "</td>";
-                                        echo "<td>" . "user0" . $i . "@tgm.ac.at" . "</td>";
-                                        echo "<td>" . $i%3 . "</td>";
-										echo "</tr>";
-									}
+									
+									
 								?>
                                 	<!-- Alle -->
                                 	<?php
