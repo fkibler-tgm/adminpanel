@@ -35,21 +35,24 @@ class AdminPanelController extends Controller {
 	
 	public function getUser($rang) {
 		$user = DB::table('user')->where('rang',$rang)->get();
-		$u_array = array(
-		foreach($this->user as $users) {
-			array($users->id,$users->username,$users->email,$users->rang);
+		$u_array = array();
+		$i=0;
+		foreach($user as $users) {
+			$u_array[$i]=array($users->id,$users->username,$users->email,$users->rang);
+			$this->i=$this->i+1;
 		}
-		);
+		
 		return $this->u_array;
 	}
 	
 	public function getallUser() {
 		$user = DB::table('user')->get();
-		$u_array = array(
-		foreach($this->user as $users) {
-			array($users->id,$users->username,$users->email,$users->rang);
+		$u_array = array();
+		$i=0;
+		foreach($user as $users) {
+			$u_array[$i]=array($users->id,$users->username,$users->email,$users->rang);
+			$this->i=$this->i+1;
 		}
-		);
 		return $this->u_array;
 	}
 	
