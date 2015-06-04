@@ -1,0 +1,11 @@
+#page-wrapper{
+	height: auto !important;
+}
+/* CSS REQUIRED */
+.state-icon {
+    left: -5px;
+}
+.list-group-item-primary {
+    color: rgba(255,255,255,1);
+    background-color: rgba(96,164,232,1);
+}
