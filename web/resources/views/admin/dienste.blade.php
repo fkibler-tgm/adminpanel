@@ -36,6 +36,30 @@
 	<script language="javascript" type="text/javascript" type="text/javascript" src="{{ URL::asset('js/flot/jquery.js')}}"></script>
 	<script language="javascript" type="text/javascript" src="{{ URL::asset('js/flot/jquery.flot.js') }}"></script>
 	<script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
+	<?php
+	
+		public function getRamData(){
+			foreach(file('/proc/meminfo') as $ri) 
+				$m[strtok($ri, ':')] = strtok(''); 
+			return 100 - round(($m['MemFree'] + $m['Buffers'] + $m['Cached']) / $m['MemTotal'] * 100); 
+		}
+		public function getCpuData(){
+			$loads = sys_getloadavg();
+			$core_nums = trim(shell_exec("grep -P '^processor' /proc/cpuinfo|wc -l"));
+			$load = round($loads[0]/($core_nums + 1)*100, 2);
+			return $load;
+		}
+		
+		public function getHddData(){
+			$df = disk_free_space("/var/www");						
+			$dt = disk_total_space("/var/www");
+			return ($this->dt/$this->df)*100;
+		}
+		
+		public function getSeitenData(){
+			//i have no idea
+		}
+	?>
 	<script type="text/javascript">
 		$(function() {
 
@@ -45,7 +69,16 @@
 		var data = [],
 			totalPoints = 300;
 
-		function getRandomData() {
+		var data2 = [],
+			totalPoints = 300;
+			
+		var data3 = [],
+			totalPoints = 300;
+			
+		var data4 = [],
+			totalPoints = 300;
+			
+		function getRam() {
 
 			if (data.length > 0)
 				data = data.slice(1);
@@ -75,6 +108,99 @@
 
 			return res;
 		}
+		
+		function getCpu() {
+
+			if (data2.length > 0)
+				data2 = data2.slice(1);
+
+			// Do a random walk
+
+			while (data2.length < totalPoints) {
+
+				var prev = data2.length > 0 ? data2[data2.length - 1] : 50,
+					y = prev + Math.random() * 10 - 5;
+
+				if (y < 0) {
+					y = 0;
+				} else if (y > 100) {
+					y = 100;
+				}
+
+				data2.push(y);
+			}
+
+			// Zip the generated y values with the x values
+
+			var res = [];
+			for (var i = 0; i < data2.length; ++i) {
+				res.push([i, data2[i]])
+			}
+
+			return res;
+		}
+		
+		function getHdd() {
+
+			if (data3.length > 0)
+				data3 = data3.slice(1);
+
+			// Do a random walk
+
+			while (data3.length < totalPoints) {
+
+				var prev = data3.length > 0 ? data3[data3.length - 1] : 50,
+					y = prev + Math.random() * 10 - 5;
+
+				if (y < 0) {
+					y = 0;
+				} else if (y > 100) {
+					y = 100;
+				}
+
+				data3.push(y);
+			}
+
+			// Zip the generated y values with the x values
+
+			var res = [];
+			for (var i = 0; i < data3.length; ++i) {
+				res.push([i, data3[i]])
+			}
+
+			return res;
+		}
+		
+		function getSeiten() {
+
+			if (data4.length > 0)
+				data4 = data4.slice(1);
+
+			// Do a random walk
+
+			while (data4.length < totalPoints) {
+
+				var prev = data4.length > 0 ? data4[data4.length - 1] : 50,
+					y = prev + Math.random() * 10 - 5;
+
+				if (y < 0) {
+					y = 0;
+				} else if (y > 100) {
+					y = 100;
+				}
+
+				data4.push(y);
+			}
+
+			// Zip the generated y values with the x values
+
+			var res = [];
+			for (var i = 0; i < data4.length; ++i) {
+				res.push([i, data4[i]])
+			}
+
+			return res;
+		}
 
 		// Set up the control widget
 
@@ -92,7 +218,7 @@
 			}
 		});
 
-		var plot = $.plot("#ram", [ getRandomData() ], {
+		var plot = $.plot("#ram", [ getRam() ], {
 			series: {
 				shadowSize: 0	// Drawing is faster without shadows
 			},
@@ -105,7 +231,7 @@
 			}
 		});
 		
-		var plot2 = $.plot("#cpu", [ getRandomData() ], {
+		var plot2 = $.plot("#cpu", [ getCpu() ], {
 			series: {
 				shadowSize: 0	// Drawing is faster without shadows
 			},
@@ -117,7 +243,7 @@
 				show: false
 			}
 		});
-		var plot3 = $.plot("#hdd", [ getRandomData() ], {
+		var plot3 = $.plot("#hdd", [ getHdd() ], {
 			series: {
 				shadowSize: 0	// Drawing is faster without shadows
 			},
@@ -129,7 +255,7 @@
 				show: false
 			}
 		});
-		var plot4 = $.plot("#seiten", [ getRandomData() ], {
+		var plot4 = $.plot("#seiten", [ getSeiten() ], {
 			series: {
 				shadowSize: 0	// Drawing is faster without shadows
 			},
@@ -145,10 +271,10 @@
 
 		function update() {
 
-			plot.setData([getRandomData()]);
-			plot2.setData([getRandomData()]);
-			plot3.setData([getRandomData()]);
-			plot4.setData([getRandomData()]);
+			plot.setData([getRam()]);
+			plot2.setData([getCpu()]);
+			plot3.setData([getHdd()]);
+			plot4.setData([getSeiten()]);
 			
 
 			// Since the axes don't change, we don't need to call plot.setupGrid()
