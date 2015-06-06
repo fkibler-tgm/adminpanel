@@ -38,25 +38,22 @@
 	<script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
 	<?php
 	
-		public function getRamData(){
-			foreach(file('/proc/meminfo') as $ri) 
-				$m[strtok($ri, ':')] = strtok(''); 
-			return 100 - round(($m['MemFree'] + $m['Buffers'] + $m['Cached']) / $m['MemTotal'] * 100); 
-		}
-		public function getCpuData(){
-			$loads = sys_getloadavg();
-			$core_nums = trim(shell_exec("grep -P '^processor' /proc/cpuinfo|wc -l"));
-			$load = round($loads[0]/($core_nums + 1)*100, 2);
-			return $load;
+		function getRamData(){
+			$ram = shell_exec("free -m | awk 'NR==2{printf '%.2f', $3,$2,$3*100/$2 }'");
+			return ($ram)
 		}
 		
-		public function getHddData(){
-			$df = disk_free_space("/var/www");						
-			$dt = disk_total_space("/var/www");
-			return ($this->dt/$this->df)*100;
+		function getCpuData(){
+			$cpu = shell_exec("top -bn1 | grep load | awk '{printf '%.2f', $(NF-2)}' ");
+			return ($cpu);
 		}
 		
-		public function getSeitenData(){
+		function getHddData(){
+			 $use = (disk_free_space("/")/disk_total_space("/"))*100;
+			 return $use;
+		}
+		
+		function getSeitenData(){
 			//i have no idea
 		}
 	?>
@@ -84,17 +81,19 @@
 				data = data.slice(1);
 
 			// Do a random walk
-
+			var i=0;
 			while (data.length < totalPoints) {
 
-				var prev = data.length > 0 ? data[data.length - 1] : 50,
-					y = prev + Math.random() * 10 - 5;
+				//var prev = data.length > 0 ? data[data.length - 1] : 50,
+					/*y = prev + Math.random() * 10 - 5;
 
 				if (y < 0) {
 					y = 0;
 				} else if (y > 100) {
 					y = 100;
 				}
+				*/
+				var y="<?php echo getRamData(); ?>";
 
 				data.push(y);
 			}
@@ -118,7 +117,7 @@
 
 			while (data2.length < totalPoints) {
 
-				var prev = data2.length > 0 ? data2[data2.length - 1] : 50,
+				/*var prev = data2.length > 0 ? data2[data2.length - 1] : 50,
 					y = prev + Math.random() * 10 - 5;
 
 				if (y < 0) {
@@ -126,7 +125,8 @@
 				} else if (y > 100) {
 					y = 100;
 				}
-
+				*/
+				var y = "<?php echo getCpuData(); ?>";
 				data2.push(y);
 			}
 
@@ -149,7 +149,7 @@
 
 			while (data3.length < totalPoints) {
 
-				var prev = data3.length > 0 ? data3[data3.length - 1] : 50,
+				/*var prev = data3.length > 0 ? data3[data3.length - 1] : 50,
 					y = prev + Math.random() * 10 - 5;
 
 				if (y < 0) {
@@ -157,7 +157,8 @@
 				} else if (y > 100) {
 					y = 100;
 				}
-
+				*/
+				var y = "<?php echo getHddData(); ?>";
 				data3.push(y);
 			}
 
@@ -298,7 +299,6 @@
 </head>
 
 <body>
-
     <div id="wrapper">
 
         <!-- Navigation -->
