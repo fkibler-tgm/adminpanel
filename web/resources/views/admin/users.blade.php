@@ -33,7 +33,24 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+	<script type="text/javascript">
+		function remove() {
+			//parameter fehlt noch
+			alert('<?php loeschen();?>');
+		}
+		function block() {
+			//parameter fehlt noch
+			alert('<?php blockieren();?>');
+		}
+	</script>
+	<?php
+		function loeschen() {
+			App::make("AdminPanelController")->removeUser(<username>);
+		}
+		function blocken() {
+			App::make("AdminPanelController")->setRang("blocked",<username>);
+		}
+	?>
 </head>
 
 <body>
@@ -288,8 +305,8 @@
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">Löschen</a></li>
-								<li><a href="#">Blockieren</a></li>
+								<li><a href="#" onclick="remove()">Löschen</a></li>
+								<li><a href="#" onclick="block()">Blockieren</a></li>
 							</ul>
 						</div>
 						&nbsp; &nbsp;
