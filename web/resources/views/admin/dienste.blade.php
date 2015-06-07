@@ -40,7 +40,7 @@
 	
 		function getRamData(){
 			$ram = shell_exec("free -m | awk 'NR==2{printf '%.2f', $3,$2,$3*100/$2 }'");
-			return ($ram)
+			return ($ram);
 		}
 		
 		function getCpuData(){
@@ -58,6 +58,145 @@
 		}
 	?>
 	<script type="text/javascript">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="http://static.pureexample.com/js/flot/excanvas.min.js"></script><![endif]-->
+<script type="text/javascript" src="http://static.pureexample.com/js/flot/jquery.flot.min.js"></script>
+<script type="text/javascript" src="http://static.pureexample.com/js/flot/jquery.flot.time.js"></script>   
+<script type="text/javascript" src="http://static.pureexample.com/js/flot/jquery.flot.axislabels.js"></script>
+ 
+<!-- CSS -->
+<style type="text/css">
+#RAM {
+    width: 500px;
+    height: 300px;
+    text-align: center;
+    margin: 0 auto;
+}
+#CPU {
+    width: 500px;
+    height: 300px;
+    text-align: center;
+    margin: 0 auto;
+}
+#HDD {
+    width: 500px;
+    height: 300px;
+    text-align: center;
+    margin: 0 auto;
+}
+#Seiten {
+    width: 1615px;
+    height: 300px;
+    text-align: center;
+    margin: 0 auto;
+}
+</style>
+ 
+ 
+<!-- Javascript -->
+<script>
+var data = [];
+var dataset;
+var totalPoints = 50;
+var updateInterval = 1000;
+var now = new Date().getTime();
+ 
+ 
+function GetData() {
+    data.shift();
+ 
+    while (data.length < totalPoints) {     
+        var y = "<?php echo getHddData(); ?>";
+        var temp = [now += updateInterval, y];
+ 
+        data.push(temp);
+    }
+}
+ 
+var options = {
+    series: {
+        lines: {
+            show: true,
+            lineWidth: 1.2,
+            fill: true
+        }
+    },
+    xaxis: {
+        mode: "time",
+        tickSize: [2, "second"],
+        tickFormatter: function (v, axis) {
+            var date = new Date(v);
+ 
+            if (date.getSeconds() % 20 == 0) {
+                var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+                var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+                var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+ 
+                return hours + ":" + minutes + ":" + seconds;
+            } else {
+                return "";
+            }
+        },
+        axisLabel: "Time",
+        axisLabelUseCanvas: true,
+        axisLabelFontSizePixels: 12,
+        axisLabelFontFamily: 'Verdana, Arial',
+        axisLabelPadding: 10
+    },
+    yaxis: {
+        min: 0,
+        max: 100,        
+        tickSize: 5,
+        tickFormatter: function (v, axis) {
+            if (v % 10 == 0) {
+                return v + "%";
+            } else {
+                return "";
+            }
+        },
+        axisLabel: "CPU loading",
+        axisLabelUseCanvas: true,
+        axisLabelFontSizePixels: 12,
+        axisLabelFontFamily: 'Verdana, Arial',
+        axisLabelPadding: 6
+    },
+    legend: {        
+        labelBoxBorderColor: "#fff"
+    }
+};
+ 
+$(document).ready(function () {
+    GetData();
+ 
+    dataset = [
+        { label: "CPU", data: data }
+    ];
+ 
+    $.plot($("#RAM"), dataset, options);
+	$.plot($("#CPU"), dataset, options);
+	$.plot($("#HDD"), dataset, options);
+	$.plot($("#Seiten"), dataset, options);
+ 
+    function update() {
+        GetData();
+ 
+        $.plot($("#RAM"), dataset, options);
+	    $.plot($("#CPU"), dataset, options);
+	    $.plot($("#HDD"), dataset, options);
+	    $.plot($("#Seiten"), dataset, options);
+        setTimeout(update, updateInterval);
+    }
+ 
+    update();
+});
+ 
+ 
+ 
+</script>
+ 
+<!-- HTML -->
+<script>
+	/*
 		$(function() {
 
 		// We use an inline data source in the example, usually data would
@@ -93,6 +232,7 @@
 					y = 100;
 				}
 				*/
+				/*
 				var y="<?php echo getRamData(); ?>";
 
 				data.push(y);
@@ -126,6 +266,7 @@
 					y = 100;
 				}
 				*/
+				/*
 				var y = "<?php echo getCpuData(); ?>";
 				data2.push(y);
 			}
@@ -158,6 +299,7 @@
 					y = 100;
 				}
 				*/
+				/*
 				var y = "<?php echo getHddData(); ?>";
 				data3.push(y);
 			}
@@ -246,7 +388,8 @@
 		});
 		var plot3 = $.plot("#hdd", [ getHdd() ], {
 			series: {
-				shadowSize: 0	// Drawing is faster without shadows
+				shadowSize: 0
+				
 			},
 			yaxis: {
 				min: 0,
@@ -294,7 +437,7 @@
 
 		//$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
 	});
-
+*/
 	</script>
 </head>
 
@@ -437,8 +580,9 @@
 							<!--
 								I will get them from another person
 							-->
-							<div id="seiten" class="#seiten" style="height: 300px;width:1600px;"></div>
-                            </div>
+							<!--<div id="seiten" class="#seiten" style="height: 300px;width:1600px;"></div>-->
+								<div id="Seiten"></div>
+							</div>
                         </div>
                     </div>
                     
@@ -454,7 +598,8 @@
 								$load = round($loads[0]/($core_nums + 1)*100, 2);
 								echo $load;
 								-->
-							<div id="cpu" class="#cpu" style="height: 300px;width:500px;"></div>
+								<div id="CPU"></div>
+							<!--<div id="cpu" class="#cpu" style="height: 300px;width:500px;"></div>-->
                             </div>
                         </div>
                     </div>
@@ -473,7 +618,8 @@
 								} 
 								echo get_memory();  
 							   -->
-								<div id="ram" class="#ram" style="height: 300px;width:500px;"></div>
+							   <div id="RAM"></div>
+								<!--<div id="ram" class="#ram" style="height: 300px;width:500px;"></div>-->
                             </div>
                         </div>
                     </div>
@@ -509,8 +655,8 @@
 									*/
 								?>
 									<!--<div id="chartContainer" style="height: 300px; width: 100%;"></div>-->
-									
-									<div id="hdd" class="#hdd" style="height: 300px;width:500px;"></div>
+									<div id="HDD"></div>
+									<!--<div id="hdd" class="#hdd" style="height: 300px;width:500px;"></div>-->
                             </div>
                         </div>
                     </div>
