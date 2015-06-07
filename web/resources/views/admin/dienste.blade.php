@@ -44,13 +44,14 @@
 		}
 		
 		function getCpuData(){
-			$cpu = shell_exec("top -bn1 | grep load | awk '{printf '%.2f', $(NF-2)}' ");
-			return ($cpu);
+			$stats = explode(' ', substr(exec('uptime'), -14));  
+			$av = round((($stats[0] + $stats[1] + $stats[2]) / 3)*100); 
+			return ($av);  
 		}
 		
 		function getHddData(){
 			 $use = (disk_free_space("/")/disk_total_space("/"))*100;
-			 return $use;
+			 return ($use);
 		}
 		
 		function getSeitenData(){
