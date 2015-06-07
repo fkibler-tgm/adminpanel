@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Administrator Panel-Backup</title>
+    <title>Administrator Panel-Admins</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{{ URL::asset('css/bootstrap.min.css') }}" rel="stylesheet">
@@ -19,9 +19,6 @@
 
     <!-- Custom Fonts -->
     <link href="{{ URL::asset('font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
-
-	<!-- Admin CSS -->
-    <link href="{{ URL::asset('css/custom.css') }}" rel="stylesheet">
 	
 	<!-- jQuery -->
     <script src="{{ URL::asset('js/jquery.js') }}"></script>
@@ -29,16 +26,12 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
 
-	<script src="{{ URL::asset('js/custom.js') }}"></script>
-
-    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 
 </head>
 
@@ -157,7 +150,7 @@
                                 <a href="admins">Administratoren</a>
                             </li> 
 							<li>
-                                <a href="standarduser">Standarduser</a>
+                                <a href="#">Standarduser</a>
                             </li>
 							<li>
                                 <a href="moderatoren">Moderatoren</a>
@@ -166,7 +159,7 @@
                         
                     </li>
                     <li ><a href="dienste">Dienste verwalten<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-signal"></span></a></li>
-                    <li ><a href="#">Backup<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-folder-open"></span></a></li>
+                    <li ><a href="backup">Backup<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-folder-open"></span></a></li>
 					<li ><a href="/">Panel verlassen<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-arrow-left"></span></a></li> 
                 </ul>
             </div>
@@ -179,75 +172,63 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                    <h2>Backup </h2>
-                        <div class="col-md-6">
-							<h3>Informationen sichern:</h3>
-								<div class="well" style="max-height: 340px; overflow: auto;">
-									<ul class="list-group checked-list-box">
-										<li class="list-group-item">Bücher</li>
-										<li class="list-group-item">Buch-Covers</li>
-										<li class="list-group-item">Profile</li>
-										<li class="list-group-item">Profilbilder</li>
-										<li class="list-group-item">Systemstatus</li>
-										<li class="list-group-item">Meldungen</li>
-									</ul>
-									<button type="button" class="btn btn-default pull pull-right">Erstellen</button>
-								</div>
-                        </div>
-								
-						<div class="col-md-6">
-							<h3>Informationen überschreiben:</h3>
-								<div class="well" style="max-height: 340px;overflow: auto;">
-									<ul class="list-group checked-list-box">
-										<li class="list-group-item">Bücher</li>
-										<li class="list-group-item">Buch-Covers</li>
-										<li class="list-group-item">Profile</li>
-										<li class="list-group-item">Profilbilder</li>
-										<li class="list-group-item">Systemstatus</li>
-										<li class="list-group-item">Meldungen</li>
-									</ul>
-									   <div class="input-group">
-										   <input type="text" class="form-control" placeholder="Nummer des Backups">
-										   <span class="input-group-btn">
-										  	 <button class="btn btn-default" type="button">Überschreiben</button>
-										   </span>
-										</div>
-						</div>
-                    </div>
-                </div>
-                <!-- /.row -->
-				
-				<div class="row">
-					<div class="col-md-11" style="left:4%;">
-						<h3>Neueste Backups:</h3>
-						<div class="table-responsive">
+                        <h2>Alle Standarduser</h2>
+                        <div class="table-responsive">
                             <table class="table table-bordered table-hover table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Nr.</th>
-                                        <th>Datum</th>
-                                        <th>Inhalte</th>
-                                        <th>Benutzt</th>
                                         <th></th>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>eMail</th>
+                                        <th>Rang</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 	<?php
-                                	for($i = 1; $i < 5; $i++){
+                                	for($i = 1; $i < 15; $i++){
                                     	echo "<tr>";
-										echo "<td>" . $i . "</td>";
-										echo "<td>" . "1" . $i . ". " . "0" . $i . ". 201". $i . "</td>";
-                                        echo "<td>" . "Bücher, Covers, Profile, Profilbilder, Systemstatus, Meldungen." . "</td>";
-                                        echo "<td>" . "Nein" . "</td>";
-                                        echo "<td><input type='checkbox'></td>";
+										echo "<td><input type='checkbox'></td>";
+										echo "<td>" . "0000" . $i . "</td>";
+                                        echo "<td>" . "admin0" . $i . "</td>";
+                                        echo "<td>" . "admin0" . $i . "@tgm.ac.at" . "</td>";
+                                        echo "<td>" . "3" . "</td>";
 										echo "</tr>";
 									}
                                     ?>
                                 </tbody>
                             </table>
                         </div>
-					</div>
-				</div>
+                        <!-- Split button -->
+						<div class="btn-group">
+							<button type="button" class="btn btn-default">User ...</button>
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<span class="caret"></span>
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#">Löschen</a></li>
+								<li><a href="#">Blockieren</a></li>
+							</ul>
+						</div>
+						&nbsp; &nbsp;
+						<!-- Split button -->
+						<div class="btn-group">
+							<button type="button" class="btn btn-default">Rang</button>
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<span class="caret"></span>
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#">Standard</a></li>
+								<li><a href="#">Moderator</a></li>
+								<li><a href="#">Administrator</a></li>
+							</ul>
+						</div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
             </div>
             <!-- /.container-fluid -->
 
@@ -256,6 +237,7 @@
 
     </div>
     <!-- /#wrapper -->
+
 
 </body>
 

@@ -24,7 +24,8 @@ Route::get('admin/dienste','AdminPanelController@showDienste');
 Route::get('admin/users','AdminPanelController@showUsers');
 Route::get('admin/backup','AdminPanelController@showBackup');
 Route::get('admin/admins','AdminPanelController@showAdmins');
-Route::get('admin/test','AdminPanelController@showTest');
+Route::get('admin/standarduser','AdminPanelController@showStuser');
+Route::get('admin/moderatoren','AdminPanelController@showModerator');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

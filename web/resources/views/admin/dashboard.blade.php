@@ -171,11 +171,17 @@
                             <li class="active">
                                 <a href="admin/admins">Administratoren</a>
                             </li>
+							<li>
+                                <a href="admin/standarduser">Standarduser</a>
+                            </li>
+							<li>
+                                <a href="admin/moderatoren">Moderatoren</a>
+                            </li>
                         </ul>
                         
                     </li>
                     <li ><a href="admin/dienste">Dienste verwalten<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-signal"></span></a></li>
-                    <li ><a href="admin/backup.">Backup<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-folder-open"></span></a></li>
+                    <li ><a href="admin/backup">Backup<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-folder-open"></span></a></li>
                     <li ><a href="/">Panel verlassen<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-arrow-left"></span></a></li> 
                 </ul>
             </div>

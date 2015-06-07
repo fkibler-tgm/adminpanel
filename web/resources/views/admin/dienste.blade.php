@@ -554,6 +554,12 @@ $(document).ready(function () {
                             <li class="active">
                                 <a href="admins">Administratoren</a>
                             </li>
+							<li>
+                                <a href="standarduser">Standarduser</a>
+                            </li>
+							<li>
+                                <a href="moderatoren">Moderatoren</a>
+                            </li>
                         </ul>
                         
                     </li>

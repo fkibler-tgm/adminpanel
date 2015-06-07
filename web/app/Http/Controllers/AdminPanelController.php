@@ -86,6 +86,18 @@ class AdminPanelController extends Controller {
             return View('admin.admins');
 			
     }
+	
+	public function showStuser() {    
+	
+            return View('admin.stuser');
+			
+    }
+	
+	public function showModerator() {    
+	
+            return View('admin.moderator');
+			
+    }
     /**
 	  *
 	  *

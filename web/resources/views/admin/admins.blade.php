@@ -149,6 +149,12 @@
                             <li class="active">
                                 <a href="#">Administratoren</a>
                             </li> 
+							<li>
+                                <a href="standarduser">Standarduser</a>
+                            </li>
+							<li>
+                                <a href="moderatoren">Moderatoren</a>
+                            </li>
                         </ul>
                         
                     </li>
