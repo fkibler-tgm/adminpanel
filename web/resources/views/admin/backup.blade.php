@@ -38,8 +38,28 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-
+	<!--
+	<script type="text/javascript">
+		function makeBackup() {
+			alert('<?php//mbackup(); ?>');
+		}
+		function loadBackup() {
+			alert('<?php// lbackup(); ?>');
+		}
+	</script>
+	-->
+	<?php
+     /*   function lbackup() {
+		//App::make("AdminPanelController")->
+		}
+		function mbackup() {
+			$ordner = "./";
+			$zielordner = "./asdf.zip";
+            App::make('AdminPanelController')->zip($ordner,$zielordner);
+		}
+*/
+	?>
+	
 </head>
 
 <body>
@@ -176,47 +196,6 @@
         <div id="page-wrapper">
 
             <div class="container-fluid">
-
-                <div class="row">
-                    <div class="col-lg-12">
-                    <h2>Backup </h2>
-                        <div class="col-md-6">
-							<h3>Informationen sichern:</h3>
-								<div class="well" style="max-height: 340px; overflow: auto;">
-									<ul class="list-group checked-list-box">
-										<li class="list-group-item">Bücher</li>
-										<li class="list-group-item">Buch-Covers</li>
-										<li class="list-group-item">Profile</li>
-										<li class="list-group-item">Profilbilder</li>
-										<li class="list-group-item">Systemstatus</li>
-										<li class="list-group-item">Meldungen</li>
-									</ul>
-									<button type="button" class="btn btn-default pull pull-right">Erstellen</button>
-								</div>
-                        </div>
-								
-						<div class="col-md-6">
-							<h3>Informationen überschreiben:</h3>
-								<div class="well" style="max-height: 340px;overflow: auto;">
-									<ul class="list-group checked-list-box">
-										<li class="list-group-item">Bücher</li>
-										<li class="list-group-item">Buch-Covers</li>
-										<li class="list-group-item">Profile</li>
-										<li class="list-group-item">Profilbilder</li>
-										<li class="list-group-item">Systemstatus</li>
-										<li class="list-group-item">Meldungen</li>
-									</ul>
-									   <div class="input-group">
-										   <input type="text" class="form-control" placeholder="Nummer des Backups">
-										   <span class="input-group-btn">
-										  	 <button class="btn btn-default" type="button">Überschreiben</button>
-										   </span>
-										</div>
-						</div>
-                    </div>
-                </div>
-                <!-- /.row -->
-				
 				<div class="row">
 					<div class="col-md-11" style="left:4%;">
 						<h3>Neueste Backups:</h3>
@@ -232,19 +211,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                	<?php
-                                	for($i = 1; $i < 5; $i++){
-                                    	echo "<tr>";
-										echo "<td>" . $i . "</td>";
-										echo "<td>" . "1" . $i . ". " . "0" . $i . ". 201". $i . "</td>";
-                                        echo "<td>" . "Bücher, Covers, Profile, Profilbilder, Systemstatus, Meldungen." . "</td>";
-                                        echo "<td>" . "Nein" . "</td>";
-                                        echo "<td><input type='checkbox'></td>";
-										echo "</tr>";
-									}
-                                    ?>
+                                	
                                 </tbody>
                             </table>
+							<div class="btn-group">
+							<button type="button" class="btn btn-default" onclick="makeBackup()">Backup erstellen</button>
+							<button type="button" class="btn btn-default" onclick="loadBackup()">Backup laden</button>
+						</div>
                         </div>
 					</div>
 				</div>

@@ -32,23 +32,27 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-	<script type="text/javascript">
+		<!--
+<script type="text/javascript">
 		function remove() {
 			//parameter fehlt noch
-			alert('<?php loeschen();?>');
+			alert('<?php //loeschen();?>');
 		}
 		function block() {
 			//parameter fehlt noch
-			alert('<?php blockieren();?>');
+			alert('<?php //blockieren();?>');
 		}
 	</script>
+	-->
 	<?php
+	/*
 		function loeschen() {
 			App::make("AdminPanelController")->removeUser(<username>);
 		}
 		function blocken() {
 			App::make("AdminPanelController")->setRang("blocked",<username>);
 		}
+		*/
 	?>
 </head>
 
@@ -202,17 +206,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                	<?php
-                                	for($i = 1; $i < 15; $i++){
-                                    	echo "<tr>";
-										echo "<td><input type='checkbox'></td>";
-										echo "<td>" . "0000" . $i . "</td>";
-                                        echo "<td>" . "admin0" . $i . "</td>";
-                                        echo "<td>" . "admin0" . $i . "@tgm.ac.at" . "</td>";
-                                        echo "<td>" . "3" . "</td>";
-										echo "</tr>";
-									}
-                                    ?>
+                                	
                                 </tbody>
                             </table>
                         </div>

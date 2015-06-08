@@ -8,7 +8,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+<?php
+									/* get disk space free (in bytes) */
+									$df = disk_free_space("/var/www");
+									/* and get disk space total (in bytes)  */
+									$dt = disk_total_space("/var/www");
+									/* now we calculate the disk space used (in bytes) */
+									$du = $dt - $df;
+									/* percentage of disk used - this will be used to also set the width % of the progress bar */
+									$dp = sprintf('%.2f',($du / $dt) * 100);
+									//---------------------------------------------------------
+									/* and we formate the size from bytes to MB, GB, etc. */
+									
+									$df = formatSize($df);
+									$du = formatSize($du);
+									$dt = formatSize($dt);
 
+									function formatSize( $bytes )
+									{
+											$types = array( 'B', 'KB', 'MB', 'GB', 'TB' );
+											for( $i = 0; $bytes >= 1024 && $i < ( count( $types ) -1 ); $bytes /= 1024, $i++ );
+													return( round( $bytes, 2 ) . " " . $types[$i] );
+									}
+									
+								?>
+								
+						
     <title>Administrator Panel-Dienste</title>
 
     <!-- Bootstrap Core CSS -->
@@ -39,8 +64,14 @@
 	<?php
 	
 		function getRamData(){
-			$ram = shell_exec("free -m | awk 'NR==2{printf '%.2f', $3,$2,$3*100/$2 }'");
-			return ($ram);
+			$free = shell_exec('free');
+			$free = (string)trim($free);
+			$free_arr = explode("\n", $free);
+			$mem = explode(" ", $free_arr[1]);
+			$mem = array_filter($mem);
+			$mem = array_merge($mem);
+			$memory_usage = $mem[2]/$mem[1]*100;
+			return $memory_usage;
 		}
 		
 		function getCpuData(){
@@ -95,11 +126,23 @@
  
  
 <!-- Javascript -->
-<script>
+<script type="text/javascript">
 var data = [];
+var data2 = [];
+var data3 = [];
+var data4 = [];
 var dataset;
+var dataset2;
+var dataset3;
+var dataset4;
 var totalPoints = 50;
 var updateInterval = 1000;
+var totalPoints2 = 50;
+var updateInterval2 = 1000;
+var totalPoints3 = 50;
+var updateInterval3 = 1000;
+var totalPoints4 = 50;
+var updateInterval4 = 1000;
 var now = new Date().getTime();
  
  
@@ -107,10 +150,40 @@ function GetData() {
     data.shift();
  
     while (data.length < totalPoints) {     
-        var y = "<?php echo getHddData(); ?>";
+        var y = "<?php echo $dp; ?>";
         var temp = [now += updateInterval, y];
  
         data.push(temp);
+    }
+}
+function GetData2() {
+    data2.shift();
+ 
+    while (data2.length < totalPoints2) {     
+        var y = "<?php echo getRamData(); ?>";
+        var temp = [now += updateInterval2, y];
+ 
+        data2.push(temp);
+    }
+}
+function GetData3() {
+    data3.shift();
+ 
+    while (data3.length < totalPoints3) {     
+        var y = "<?php echo getCpuData(); ?>";
+        var temp = [now += updateInterval3, y];
+ 
+        data3.push(temp);
+    }
+}
+function GetData4() {
+    data4.shift();
+ 
+    while (data4.length < totalPoints4) {     
+        var y = "<?php echo getHddData(); ?>";
+        var temp = [now += updateInterval4, y];
+ 
+        data4.push(temp);
     }
 }
  
@@ -155,7 +228,7 @@ var options = {
                 return "";
             }
         },
-        axisLabel: "CPU loading",
+        axisLabel: "",
         axisLabelUseCanvas: true,
         axisLabelFontSizePixels: 12,
         axisLabelFontFamily: 'Verdana, Arial',
@@ -165,30 +238,77 @@ var options = {
         labelBoxBorderColor: "#fff"
     }
 };
- 
-$(document).ready(function () {
-    GetData();
+  function drawHdd() {
+	  GetData();
  
     dataset = [
-        { label: "CPU", data: data }
+        { label: "Hdd", data: data }
     ];
- 
-    $.plot($("#RAM"), dataset, options);
-	$.plot($("#CPU"), dataset, options);
 	$.plot($("#HDD"), dataset, options);
-	$.plot($("#Seiten"), dataset, options);
+  }
+  function drawRam() {
+	  GetData2();
  
-    function update() {
+    dataset2 = [
+        { label: "Ram", data: data }
+    ];
+	$.plot($("#RAM"), dataset2, options);
+  }
+  function drawCpu() {
+	  GetData3();
+ 
+    dataset3 = [
+        { label: "Cpu", data: data }
+    ];
+	$.plot($("#CPU"), dataset3, options);
+  }
+  function drawSeiten() {
+	  GetData4();
+ 
+    dataset4 = [
+        { label: "Seiten", data: data }
+    ];
+	$.plot($("#Seiten"), dataset4, options);
+  }
+$(document).ready(function () {
+    drawHdd();
+	drawRam();
+	drawCpu();
+	drawSeiten();
+    
+	function updateHdd() {
         GetData();
  
-        $.plot($("#RAM"), dataset, options);
-	    $.plot($("#CPU"), dataset, options);
-	    $.plot($("#HDD"), dataset, options);
-	    $.plot($("#Seiten"), dataset, options);
-        setTimeout(update, updateInterval);
+        $.plot($("#HDD"), dataset, options);
+	    
+        setTimeout(updateHdd, updateInterval);
     }
+	
+	function updateRam() {
+        GetData2();
  
-    update();
+        $.plot($("#RAM"), dataset2, options);
+	    
+        setTimeout(updateRam, updateInterval2);
+    }
+	function updateCpu() {
+        GetData3();
+ 
+        $.plot($("#CPU"), dataset3, options);
+	    
+        setTimeout(updateCpu, updateInterval3);
+    }
+	function updateSeiten() {
+        GetData4();
+ 
+        $.plot($("#Seiten"), dataset4, options);
+	    
+        setTimeout(updateSeiten, updateInterval4);
+    }
+    updateHdd();
+	updateRam();
+	updateCpu();
+	updateSeiten();
 });
  
  

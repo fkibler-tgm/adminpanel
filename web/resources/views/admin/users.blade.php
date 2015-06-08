@@ -33,23 +33,27 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-	<script type="text/javascript">
+		<!--
+<script type="text/javascript">
 		function remove() {
 			//parameter fehlt noch
-			alert('<?php loeschen();?>');
+			alert('<?php //loeschen();?>');
 		}
 		function block() {
 			//parameter fehlt noch
-			alert('<?php blockieren();?>');
+			alert('<?php //blockieren();?>');
 		}
 	</script>
+	-->
 	<?php
+	/*
 		function loeschen() {
 			App::make("AdminPanelController")->removeUser(<username>);
 		}
 		function blocken() {
 			App::make("AdminPanelController")->setRang("blocked",<username>);
 		}
+		*/
 	?>
 </head>
 
@@ -323,6 +327,7 @@
 								<li><a href="#">Administrator</a></li>
 							</ul>
 						</div>
+
                     </div>
                 </div>
                 <!-- /.row -->
