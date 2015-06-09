@@ -288,6 +288,7 @@ var options2 = {
         axisLabelFontSizePixels: 12,
         axisLabelFontFamily: 'Verdana, Arial',
         axisLabelPadding: 6
+		
     },
     legend: {        
         labelBoxBorderColor: "#fff"
