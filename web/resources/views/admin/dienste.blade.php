@@ -86,7 +86,7 @@
 		}
 		
 		function getSeitenData(){
-			//i have no idea
+			return 953;
 		}
 	?>
 	<script type="text/javascript">
@@ -144,6 +144,9 @@ var updateInterval3 = 1000;
 var totalPoints4 = 50;
 var updateInterval4 = 1000;
 var now = new Date().getTime();
+var now2 = new Date().getTime();
+var now3 = new Date().getTime();
+var now4 = new Date().getTime();
  
  
 function GetData() {
@@ -161,7 +164,7 @@ function GetData2() {
  
     while (data2.length < totalPoints2) {     
         var y = "<?php echo getRamData(); ?>";
-        var temp = [now += updateInterval2, y];
+        var temp = [now2 += updateInterval2, y];
  
         data2.push(temp);
     }
@@ -171,7 +174,7 @@ function GetData3() {
  
     while (data3.length < totalPoints3) {     
         var y = "<?php echo getCpuData(); ?>";
-        var temp = [now += updateInterval3, y];
+        var temp = [now3 += updateInterval3, y];
  
         data3.push(temp);
     }
@@ -180,8 +183,8 @@ function GetData4() {
     data4.shift();
  
     while (data4.length < totalPoints4) {     
-        var y = "<?php echo getHddData(); ?>";
-        var temp = [now += updateInterval4, y];
+        var y = "<?php echo getSeitenData(); ?>";
+        var temp = [now4 += updateInterval4, y];
  
         data4.push(temp);
     }
@@ -238,6 +241,58 @@ var options = {
         labelBoxBorderColor: "#fff"
     }
 };
+
+var options2 = {
+    series: {
+        lines: {
+            show: true,
+            lineWidth: 1.2,
+            fill: true
+        }
+    },
+    xaxis: {
+        mode: "time",
+        tickSize: [2, "second"],
+        tickFormatter: function (v, axis) {
+            var date = new Date(v);
+ 
+            if (date.getSeconds() % 20 == 0) {
+                var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+                var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+                var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+ 
+                return hours + ":" + minutes + ":" + seconds;
+            } else {
+                return "";
+            }
+        },
+        axisLabel: "Time",
+        axisLabelUseCanvas: true,
+        axisLabelFontSizePixels: 12,
+        axisLabelFontFamily: 'Verdana, Arial',
+        axisLabelPadding: 10
+    },
+    yaxis: {
+        min: 0,
+        max: 1000,        
+        tickSize: 50,
+        tickFormatter: function (v, axis) {
+            if (v % 100 == 0) {
+                return v + "";
+            } else {
+                return "";
+            }
+        },
+        axisLabel: "",
+        axisLabelUseCanvas: true,
+        axisLabelFontSizePixels: 12,
+        axisLabelFontFamily: 'Verdana, Arial',
+        axisLabelPadding: 6
+    },
+    legend: {        
+        labelBoxBorderColor: "#fff"
+    }
+};
   function drawHdd() {
 	  GetData();
  
@@ -250,7 +305,7 @@ var options = {
 	  GetData2();
  
     dataset2 = [
-        { label: "Ram", data: data }
+        { label: "Ram", data: data2 }
     ];
 	$.plot($("#RAM"), dataset2, options);
   }
@@ -258,7 +313,7 @@ var options = {
 	  GetData3();
  
     dataset3 = [
-        { label: "Cpu", data: data }
+        { label: "Cpu", data: data3 }
     ];
 	$.plot($("#CPU"), dataset3, options);
   }
@@ -266,9 +321,9 @@ var options = {
 	  GetData4();
  
     dataset4 = [
-        { label: "Seiten", data: data }
+        { label: "Seiten", data: data4 }
     ];
-	$.plot($("#Seiten"), dataset4, options);
+	$.plot($("#Seiten"), dataset4, options2);
   }
 $(document).ready(function () {
     drawHdd();
@@ -301,7 +356,7 @@ $(document).ready(function () {
 	function updateSeiten() {
         GetData4();
  
-        $.plot($("#Seiten"), dataset4, options);
+        $.plot($("#Seiten"), dataset4, options2);
 	    
         setTimeout(updateSeiten, updateInterval4);
     }
@@ -314,252 +369,6 @@ $(document).ready(function () {
  
  
 </script>
- 
-<!-- HTML -->
-<script>
-	/*
-		$(function() {
-
-		// We use an inline data source in the example, usually data would
-		// be fetched from a server
-
-		var data = [],
-			totalPoints = 300;
-
-		var data2 = [],
-			totalPoints = 300;
-			
-		var data3 = [],
-			totalPoints = 300;
-			
-		var data4 = [],
-			totalPoints = 300;
-			
-		function getRam() {
-
-			if (data.length > 0)
-				data = data.slice(1);
-
-			// Do a random walk
-			var i=0;
-			while (data.length < totalPoints) {
-
-				//var prev = data.length > 0 ? data[data.length - 1] : 50,
-					/*y = prev + Math.random() * 10 - 5;
-
-				if (y < 0) {
-					y = 0;
-				} else if (y > 100) {
-					y = 100;
-				}
-				*/
-				/*
-				var y="<?php echo getRamData(); ?>";
-
-				data.push(y);
-			}
-
-			// Zip the generated y values with the x values
-
-			var res = [];
-			for (var i = 0; i < data.length; ++i) {
-				res.push([i, data[i]])
-			}
-
-			return res;
-		}
-		
-		function getCpu() {
-
-			if (data2.length > 0)
-				data2 = data2.slice(1);
-
-			// Do a random walk
-
-			while (data2.length < totalPoints) {
-
-				/*var prev = data2.length > 0 ? data2[data2.length - 1] : 50,
-					y = prev + Math.random() * 10 - 5;
-
-				if (y < 0) {
-					y = 0;
-				} else if (y > 100) {
-					y = 100;
-				}
-				*/
-				/*
-				var y = "<?php echo getCpuData(); ?>";
-				data2.push(y);
-			}
-
-			// Zip the generated y values with the x values
-
-			var res = [];
-			for (var i = 0; i < data2.length; ++i) {
-				res.push([i, data2[i]])
-			}
-
-			return res;
-		}
-		
-		function getHdd() {
-
-			if (data3.length > 0)
-				data3 = data3.slice(1);
-
-			// Do a random walk
-
-			while (data3.length < totalPoints) {
-
-				/*var prev = data3.length > 0 ? data3[data3.length - 1] : 50,
-					y = prev + Math.random() * 10 - 5;
-
-				if (y < 0) {
-					y = 0;
-				} else if (y > 100) {
-					y = 100;
-				}
-				*/
-				/*
-				var y = "<?php echo getHddData(); ?>";
-				data3.push(y);
-			}
-
-			// Zip the generated y values with the x values
-
-			var res = [];
-			for (var i = 0; i < data3.length; ++i) {
-				res.push([i, data3[i]])
-			}
-
-			return res;
-		}
-		
-		function getSeiten() {
-
-			if (data4.length > 0)
-				data4 = data4.slice(1);
-
-			// Do a random walk
-
-			while (data4.length < totalPoints) {
-
-				var prev = data4.length > 0 ? data4[data4.length - 1] : 50,
-					y = prev + Math.random() * 10 - 5;
-
-				if (y < 0) {
-					y = 0;
-				} else if (y > 100) {
-					y = 100;
-				}
-
-				data4.push(y);
-			}
-
-			// Zip the generated y values with the x values
-
-			var res = [];
-			for (var i = 0; i < data4.length; ++i) {
-				res.push([i, data4[i]])
-			}
-
-			return res;
-		}
-
-		// Set up the control widget
-
-		var updateInterval = 30;
-		$("#updateInterval").val(updateInterval).change(function () {
-			var v = $(this).val();
-			if (v && !isNaN(+v)) {
-				updateInterval = +v;
-				if (updateInterval < 1) {
-					updateInterval = 1;
-				} else if (updateInterval > 2000) {
-					updateInterval = 2000;
-				}
-				$(this).val("" + updateInterval);
-			}
-		});
-
-		var plot = $.plot("#ram", [ getRam() ], {
-			series: {
-				shadowSize: 0	// Drawing is faster without shadows
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: false
-			}
-		});
-		
-		var plot2 = $.plot("#cpu", [ getCpu() ], {
-			series: {
-				shadowSize: 0	// Drawing is faster without shadows
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: false
-			}
-		});
-		var plot3 = $.plot("#hdd", [ getHdd() ], {
-			series: {
-				shadowSize: 0
-				
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: false
-			}
-		});
-		var plot4 = $.plot("#seiten", [ getSeiten() ], {
-			series: {
-				shadowSize: 0	// Drawing is faster without shadows
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: false
-			}
-		});
-		
-
-		function update() {
-
-			plot.setData([getRam()]);
-			plot2.setData([getCpu()]);
-			plot3.setData([getHdd()]);
-			plot4.setData([getSeiten()]);
-			
-
-			// Since the axes don't change, we don't need to call plot.setupGrid()
-
-			plot.draw();
-			plot2.draw();
-			plot3.draw();
-			plot4.draw();
-			
-			setTimeout(update, updateInterval);
-		}
-
-		update();
-
-		// Add the Flot version string to the footer
-
-		//$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
-	});
-*/
-	</script>
 </head>
 
 <body>
@@ -701,7 +510,7 @@ $(document).ready(function () {
                         <h2>Dienste verwalten</h2>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Seitenaufrufe</h3>
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Seitenaufrufe&nbsp;&nbsp;&nbsp;<?php echo getSeitenData(); ?></h3>
                             </div>
                             <div class="panel-body">
 							<!--
